@@ -39,7 +39,7 @@ for filename in os.listdir(directory):
         print("Please wait, processing file: ", filename)
         # Read the CSV file
         file_path = os.path.join(directory, filename)
-        data = pd.read_csv(file_path)
+        data = pd.read_csv(file_path, encoding='ISO-8859-1')
 
         # Check if the desired column exists in the file
         if column_name in data.columns:

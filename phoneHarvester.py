@@ -1,6 +1,10 @@
 import os, sys
 import pandas as pd
 
+
+# clear the terminal
+os.system('cls' if os.name == 'nt' else 'clear')
+
 # Set the directory containing the CSV files
 directory = 'files'
 
@@ -38,11 +42,11 @@ filenames = sorted([f for f in os.listdir(directory) if f.endswith('.csv')])
 # which files currently processing
 fileOrders = []
 
+print("Please Wait Processing Files...\n")
 
 # Iterate over each file in the directory
 for filename in os.listdir(directory):
     if filename.endswith('.csv'):
-        print("Please wait, processing file: ", filename)
         # Read the CSV file
         file_path = os.path.join(directory, filename)
         data = pd.read_csv(file_path, encoding='ISO-8859-1')
@@ -50,10 +54,12 @@ for filename in os.listdir(directory):
         # Check if the desired column exists in the file
         if column_name in data.columns:
             fileOrders.append(filename+ ' - ' + 'Success')
+            print('Success - ' + (filename))
             # Extract the column and add it to the combined DataFrame
             combined_data = pd.concat([combined_data, data[[column_name]]], ignore_index=True)
         else:
             fileOrders.append(filename + ' - ' + 'Failed, Column not found')
+            print('Fail - ' + (filename))
             print(f'Column "{column_name}" not found in file "{filename}"')
 
 # Save the combined DataFrame to a new CSV file
@@ -80,6 +86,9 @@ if compare.lower() == 'n':
 
 # Read the merged phone numbers into a DataFrame
 merged_phones = pd.read_csv(output_path)
+
+# Remove duplicates from the merged phone numbers
+merged_phones = merged_phones.drop_duplicates(subset=[column_name])
 
 # Set the directory containing the comparison CSV files
 compare_directory = 'compare'
